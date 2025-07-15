@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Locallens</string>
+    <string-array name="types_problemes">
+        <item>Fuite</item>
+        <item>Éclairage</item>
+        <item>Voirie</item>
+        <item>Déchet</item>
+        <item>Autre</item>
+    </string-array>
+
+    <string-array name="statuts_problemes">
+        <item>Non traité</item>
+        <item>En cours</item>
+        <item>Réglé</item>
+    </string-array>
+
+</resources>

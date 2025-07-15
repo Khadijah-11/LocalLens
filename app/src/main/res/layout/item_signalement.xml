@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/titreView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Titre"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/typeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/dateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/statutView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statut"
+            android:textColor="#FFFFFF"
+            android:padding="4dp"
+            android:layout_marginTop="8dp"
+            android:background="#F44336" /> <!-- Default red -->
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
