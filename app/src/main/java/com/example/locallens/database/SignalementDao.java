@@ -30,4 +30,9 @@ public interface SignalementDao {
 
     @Query("SELECT * FROM Signalement WHERE titre LIKE '%' || :motCle || '%' OR description LIKE '%' || :motCle || '%'")
     List<Signalement> search(String motCle);
+
+
+    @Query("SELECT * FROM Signalement WHERE id = :signalementId LIMIT 1")
+    Signalement getById(int signalementId);
+
 }

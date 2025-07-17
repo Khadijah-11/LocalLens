@@ -31,6 +31,7 @@ public class AddIssueActivity extends AppCompatActivity {
         spinnerStatut = findViewById(R.id.spinnerStatut);
         buttonDate = findViewById(R.id.buttonDate);
         buttonSave = findViewById(R.id.buttonSave);
+        Button btnCancel = findViewById(R.id.btnCancel);
 
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(
                 this, R.array.types_problemes, android.R.layout.simple_spinner_item);
@@ -42,6 +43,30 @@ public class AddIssueActivity extends AppCompatActivity {
         statutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerStatut.setAdapter(statutAdapter);
 
+        int signalementId = getIntent().getIntExtra("signalement_id", -1);
+        if (signalementId != -1) {
+            // Edit mode
+            new Thread(() -> {
+                Signalement existing = MyDB.getInstance(this).signalementDao().getById(signalementId);
+                runOnUiThread(() -> {
+                    editTitre.setText(existing.titre);
+                    editDescription.setText(existing.description);
+
+                    // Set spinner selections
+                    setSpinnerSelection(spinnerType, existing.type);
+                    setSpinnerSelection(spinnerStatut, existing.statut);
+
+                    // Set date
+                    buttonDate.setText(existing.dateSignalement);
+
+                    // Save the ID for later update
+                    buttonSave.setTag(existing.id);
+
+                });
+            }).start();
+        }
+
+
         buttonDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
             int y = c.get(Calendar.YEAR), m = c.get(Calendar.MONTH), d = c.get(Calendar.DAY_OF_MONTH);
@@ -51,7 +76,21 @@ public class AddIssueActivity extends AppCompatActivity {
         });
 
         buttonSave.setOnClickListener(v -> saveSignalement());
+        btnCancel.setOnClickListener(v -> {
+            finish();
+        });
     }
+
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
 
     private void saveSignalement() {
         String titre = editTitre.getText().toString().trim();
@@ -71,11 +110,20 @@ public class AddIssueActivity extends AppCompatActivity {
         s.imagePath = null;
 
         new Thread(() -> {
-            MyDB.getInstance(this).signalementDao().insert(s);
+            Integer existingId = (Integer) buttonSave.getTag();
+            if (existingId != null) {
+                s.id = existingId;
+                MyDB.getInstance(this).signalementDao().update(s);
+            } else {
+                MyDB.getInstance(this).signalementDao().insert(s);
+            }
+
             runOnUiThread(() -> {
                 Toast.makeText(this, "Signalement enregistré !", Toast.LENGTH_SHORT).show();
                 finish();
             });
         }).start();
     }
+
+
 }

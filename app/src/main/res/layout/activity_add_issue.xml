@@ -44,5 +44,14 @@
             android:layout_height="wrap_content"
             android:text="Enregistrer"
             android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Annuler"
+            android:layout_margin="8dp"
+            android:layout_gravity="end"/>
+
     </LinearLayout>
 </ScrollView>

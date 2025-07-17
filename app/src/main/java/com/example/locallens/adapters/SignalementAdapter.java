@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.content.Intent;
+import com.example.locallens.activities.AddIssueActivity;
+
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +45,12 @@ public class SignalementAdapter extends RecyclerView.Adapter<SignalementAdapter.
         } else {
             holder.statutView.setBackgroundColor(0xFFF44336); // Red
         }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), AddIssueActivity.class);
+            intent.putExtra("signalement_id", s.id);  // pass the ID to edit
+            v.getContext().startActivity(intent);
+        });
+
     }
 
     @Override
