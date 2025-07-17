@@ -5,12 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
+
+import com.example.locallens.MainActivity;
 import com.example.locallens.activities.AddIssueActivity;
 
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.locallens.R;
+import com.example.locallens.database.MyDB;
 import com.example.locallens.models.Signalement;
 
 import java.util.List;
@@ -45,11 +49,27 @@ public class SignalementAdapter extends RecyclerView.Adapter<SignalementAdapter.
         } else {
             holder.statutView.setBackgroundColor(0xFFF44336); // Red
         }
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), AddIssueActivity.class);
-            intent.putExtra("signalement_id", s.id);  // pass the ID to edit
-            v.getContext().startActivity(intent);
+        holder.itemView.setOnLongClickListener(v -> {
+            new android.app.AlertDialog.Builder(v.getContext())
+                    .setTitle("Supprimer")
+                    .setMessage("Voulez-vous supprimer ce signalement ?")
+                    .setPositiveButton("Oui", (dialog, which) -> {
+                        new Thread(() -> {
+                            MyDB.getInstance(v.getContext()).signalementDao().delete(s);
+                            // Refresh UI on main thread
+                            ((MainActivity) v.getContext()).runOnUiThread(() -> {
+                                signalementList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, signalementList.size());
+                                Toast.makeText(v.getContext(), "Supprimé !", Toast.LENGTH_SHORT).show();
+                            });
+                        }).start();
+                    })
+                    .setNegativeButton("Annuler", null)
+                    .show();
+            return true;
         });
+
 
     }
 
