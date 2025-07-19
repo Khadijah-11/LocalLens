@@ -41,6 +41,6 @@
             android:textColor="#FFFFFF"
             android:padding="4dp"
             android:layout_marginTop="8dp"
-            android:background="#F44336" /> <!-- Default red -->
+            android:background="#F44336" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -49,6 +49,13 @@ public class SignalementAdapter extends RecyclerView.Adapter<SignalementAdapter.
         } else {
             holder.statutView.setBackgroundColor(0xFFF44336); // Red
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), AddIssueActivity.class);
+            intent.putExtra("signalement_id", s.id);
+            v.getContext().startActivity(intent);
+        });
+
         holder.itemView.setOnLongClickListener(v -> {
             new android.app.AlertDialog.Builder(v.getContext())
                     .setTitle("Supprimer")
@@ -56,7 +63,6 @@ public class SignalementAdapter extends RecyclerView.Adapter<SignalementAdapter.
                     .setPositiveButton("Oui", (dialog, which) -> {
                         new Thread(() -> {
                             MyDB.getInstance(v.getContext()).signalementDao().delete(s);
-                            // Refresh UI on main thread
                             ((MainActivity) v.getContext()).runOnUiThread(() -> {
                                 signalementList.remove(position);
                                 notifyItemRemoved(position);
@@ -69,9 +75,8 @@ public class SignalementAdapter extends RecyclerView.Adapter<SignalementAdapter.
                     .show();
             return true;
         });
-
-
     }
+
 
     @Override
     public int getItemCount() {
